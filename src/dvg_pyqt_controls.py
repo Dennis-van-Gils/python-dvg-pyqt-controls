@@ -6,19 +6,32 @@ many of my projects.
 __author__ = "Dennis van Gils"
 __authoremail__ = "vangils.dennis@gmail.com"
 __url__ = "https://github.com/Dennis-van-Gils/python-dvg-pyqt-controls"
-__date__ = "11-08-2020"
-__version__ = "1.0.0"
+__date__ = "20-01-2021"
+__version__ = "2.0.0"
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtGui import QCursor
 
-COLOR_INDIAN_RED_2 = "rgb(225, 102, 102)"
-COLOR_SPRING_GREEN_2 = "rgb(0, 238, 118)"
-COLOR_BISQUE_5 = "rgb(252, 218, 183)"
-COLOR_READ_ONLY = "rgb(252, 240, 227)"
-COLOR_BUTTON_BG = "rgb(232, 232, 232)"
-COLOR_LED_NEUTRAL = "rgb(240, 240, 240)"
+# fmt: off
+# Legacy v1.0
+COLOR_INDIAN_RED_2   = "rgb(225, 102, 102)" # Changed to COLOR_LED_RED
+COLOR_SPRING_GREEN_2 = "rgb(0, 238, 118)"   # Changed to COLOR_LED_GREEN
+COLOR_BISQUE_5       = "rgb(252, 218, 183)" # Changed to COLOR_GROUP_BG
+COLOR_BUTTON_BG      = "rgb(232, 232, 232)" # Changed to COLOR_BG
+
+# Modern v2.0
+COLOR_BG             = "rgb(240, 240, 240)"
+COLOR_LED_GREEN      = "rgb(0  , 238, 118)"
+COLOR_LED_RED        = "rgb(225, 102, 102)"
+COLOR_LED_NEUTRAL    = "rgb(240, 240, 240)"
+COLOR_GROUP_BG       = "rgb(252, 208, 173)"
+COLOR_READ_ONLY      = "rgb(250, 230, 210)"
+COLOR_TAB_ACTIVE     = "rgb(207, 225, 225)"
+COLOR_TAB            = "rgb(234, 235, 233)"
+COLOR_HOVER          = "rgb(229, 241, 251)"
+COLOR_HOVER_BORDER   = "rgb(0  , 120, 215)"
+# fmt: on
 
 # ------------------------------------------------------------------------------
 #   Style sheets
@@ -81,7 +94,7 @@ SS_TEXTBOX_ERRORS = (
 
 SS_GROUP = (
     "QGroupBox {"
-        "background-color: " + COLOR_BISQUE_5 + ";"
+        "background-color: " + COLOR_GROUP_BG + ";"
         "border: 2px solid gray;"
         "border-radius: 5px;"
         "font: bold;"
@@ -101,7 +114,7 @@ SS_GROUP = (
 
 SS_TITLE = (
     "QLabel {"
-        "background-color: " + COLOR_BISQUE_5 + ";"
+        "background-color: " + COLOR_GROUP_BG + ";"
         "padding: 10px;"
         "border-radius: 5px;"
         "font: bold;}"
@@ -121,7 +134,7 @@ def create_LED_indicator(**kwargs) -> QPushButton:
     # fmt: off
     SS = (
         "QPushButton {"
-            "background-color: " + COLOR_INDIAN_RED_2 + ";"
+            "background-color: " + COLOR_LED_RED + ";"
             "color: black;"
             "border: 1px solid black;"
             "border-radius: 15px;"
@@ -131,7 +144,7 @@ def create_LED_indicator(**kwargs) -> QPushButton:
             "width: 30px;}"
 
         "QPushButton:checked {"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";}"
+            "background-color: " + COLOR_LED_GREEN + ";}"
     )
     # fmt: on
     button = QPushButton(checkable=True, enabled=False, **kwargs)
@@ -147,7 +160,7 @@ def create_LED_indicator_rect(**kwargs) -> QPushButton:
     # fmt: off
     SS = (
         "QPushButton {"
-            "background-color: " + COLOR_INDIAN_RED_2 + ";"
+            "background-color: " + COLOR_LED_RED + ";"
             "color: black;"
             "border: 1px solid black;"
             "border-radius: 0px;"
@@ -155,7 +168,7 @@ def create_LED_indicator_rect(**kwargs) -> QPushButton:
             "min-width: 76px;}"
 
         "QPushButton:checked {"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";}"
+            "background-color: " + COLOR_LED_GREEN + ";}"
     )
     # fmt: on
     button = QPushButton(checkable=True, enabled=False, **kwargs)
@@ -171,7 +184,7 @@ def create_error_LED(**kwargs) -> QPushButton:
     # fmt: off
     SS = (
         "QPushButton {"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";"
+            "background-color: " + COLOR_LED_GREEN + ";"
             "color: black;"
             "border: 1px solid black;"
             "border-radius: 0px;"
@@ -206,7 +219,7 @@ def create_tiny_LED(**kwargs) -> QPushButton:
             "width: 10px;}"
 
         "QPushButton:checked {"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";}"
+            "background-color: " + COLOR_LED_GREEN + ";}"
     )
     # fmt: on
     button = QPushButton(checkable=True, enabled=False, **kwargs)
@@ -263,7 +276,7 @@ def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
             "max-width: 30px;"
             "height: 30px;"
             "width: 30px;"
-            "background-color: " + COLOR_INDIAN_RED_2 + ";}"
+            "background-color: " + COLOR_LED_RED + ";}"
 
         "QPushButton:disabled {"
             "border: 1px solid black;"
@@ -272,7 +285,7 @@ def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
 
         "QPushButton:checked {"
             "border-style: outset;"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";}"
+            "background-color: " + COLOR_LED_GREEN + ";}"
 
         "QPushButton::hover {"
             "border-color: black;}"
@@ -303,7 +316,7 @@ def create_Toggle_button(text: str = "", **kwargs) -> QPushButton:
     # fmt: off
     SS = (
         "QPushButton {"
-            "background-color: " + COLOR_BUTTON_BG + ";"
+            "background-color: " + COLOR_BG + ";"
             "border-style: outset;"
             "border-color: gray dimgray dimgray gray;"
             "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
@@ -315,7 +328,7 @@ def create_Toggle_button(text: str = "", **kwargs) -> QPushButton:
             "color: dimgray;}"
 
         "QPushButton:checked {"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";"
+            "background-color: " + COLOR_LED_GREEN + ";"
             "border-style: inset;"
             "border-color: dimgray mediumspringgreen mediumspringgreen dimgray;}"
     )
@@ -334,7 +347,7 @@ def create_Toggle_button_2(text: str = "", **kwargs) -> QPushButton:
     # fmt: off
     SS = (
         "QPushButton {"
-            "background-color: " + COLOR_BUTTON_BG + ";"
+            "background-color: " + COLOR_BG + ";"
             "border-style: outset;"
             "border-color: gray dimgray dimgray gray;"
             "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
@@ -379,7 +392,7 @@ def create_Toggle_button_3(text: str = "", **kwargs) -> QPushButton:
             "color: dimgray;}"
 
         "QPushButton:checked {"
-            "background-color: " + COLOR_SPRING_GREEN_2 + ";"
+            "background-color: " + COLOR_LED_GREEN + ";"
             "border-style: inset;"
             "border-color: dimgray mediumspringgreen mediumspringgreen dimgray;"
             "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
