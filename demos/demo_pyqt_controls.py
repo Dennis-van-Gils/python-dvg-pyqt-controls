@@ -208,7 +208,8 @@ class MainWindow(QtWid.QWidget):
         grid.addWidget(QtWid.QLineEdit("Default QLineEdit"), 1, 0)
         grid.addWidget(QtWid.QTextEdit("Default QTextEdit"), 2, 0)
 
-        grpb = QtWid.QGroupBox("PyQt5 defaults using SS_GROUP")
+        grpb = QtWid.QGroupBox("PyQt5 defaults using SS_GROUP_RECT")
+        grpb.setStyleSheet(c.SS_GROUP_RECT)
         grpb.setLayout(grid)
 
         vbox_sub = QtWid.QVBoxLayout()

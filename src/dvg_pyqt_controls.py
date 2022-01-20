@@ -11,7 +11,7 @@ __version__ = "2.0.0"
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QColor, QCursor
 
 # fmt: off
 # Legacy v1.0
@@ -33,6 +33,13 @@ COLOR_HOVER          = "rgb(229, 241, 251)"
 COLOR_HOVER_BORDER   = "rgb(0  , 120, 215)"
 COLOR_ERROR_RED      = "rgb(255,   0,   0)"
 COLOR_WARNING_YELLOW = "yellow"
+
+# Default settings for PyQtGraph
+# Usage:
+#  pg.setConfigOption("background", COLOR_GRAPH_BG)
+#  pg.setConfigOption("foreground", COLOR_GRAPH_FG)
+COLOR_GRAPH_BG = QColor(  0,  20,  20)  # Foreground
+COLOR_GRAPH_FG = QColor(240, 240, 240)  # Background
 # fmt: on
 
 # ------------------------------------------------------------------------------
@@ -40,61 +47,98 @@ COLOR_WARNING_YELLOW = "yellow"
 # ------------------------------------------------------------------------------
 
 # fmt: off
-SS_TEXTBOX_READ_ONLY = (
+SS_HOVER = (  # Modern v2.0
+    "QLineEdit:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
+    "QPlainTextEdit:hover {"
+        #"background: " + COLOR_HOVER + ";"  # Commented out: Ugly
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
+    "QCheckBox:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border: 0px solid " + COLOR_HOVER_BORDER + ";}"
+    "QRadioButton:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border: 0px solid " + COLOR_HOVER_BORDER + ";}")
+
+SS_TEXTBOX_READ_ONLY = ( # Modern v2.0
     "QLineEdit {"
         "padding: 0 2px;"
-        "border: 1px solid gray;}"
-
+        "border: 1px solid black;}"
     "QLineEdit:read-only {"
+        "border: 1px solid gray;"
         "background: " + COLOR_READ_ONLY + ";}"
-
-    "QLineEdit::hover {"
-        "border-color: black;}"
+    "QLineEdit:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
+    "QLineEdit:read-only:hover {"
+        "background: " + COLOR_READ_ONLY + ";"
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
 
     "QPlainTextEdit {"
+        "border: 1px solid black;}"
+    'QPlainTextEdit[readOnly=\"true\"] {'
+        "background-color: " + COLOR_READ_ONLY + ";"
         "border: 1px solid gray;}"
-
-    'QPlainTextEdit[readOnly="true"] {'
-        "background-color: " + COLOR_READ_ONLY + ";}"
-
-    "QPlainTextEdit::hover {"
-        "border-color: black;}"
+    "QPlainTextEdit:hover {"
+        #"background: " + COLOR_HOVER + ";"  # Commented out: Ugly
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
+    'QPlainTextEdit[readOnly=\"true\"]:hover {'
+        "background-color: " + COLOR_READ_ONLY + ";"
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
 )
 
-SS_TEXTBOX_ERRORS = (
+SS_TEXTBOX_ERRORS = (  # Modern v2.0
     "QLineEdit {"
         "padding: 0 2px;"
-        "border: 1px solid gray;"
+        "border: 1px solid black;"
         "background: " + COLOR_READ_ONLY + ";}"
-
+    "QLineEdit:hover {"
+        #"background: " + COLOR_HOVER + ";"  # Commented out: Ugly
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
     "QLineEdit:read-only {"
         "border: 2px solid red;"
-        "background: yellow;"
+        "background: " + COLOR_WARNING_YELLOW + ";"
         "color: black;}"
-
-    "QLineEdit::hover {"
-            "border-color: black;}"
-
-    "QLineEdit:read-only::hover {"
-        "border-color: red;}"
 
     "QPlainTextEdit {"
-        "border: 1px solid gray;"
+        "border: 1px solid black;"
         "background-color: " + COLOR_READ_ONLY + ";}"
-
-    'QPlainTextEdit[readOnly="true"] {'
+    "QPlainTextEdit:hover {"
+        "border: 1px solid " + COLOR_HOVER_BORDER + ";}"
+    'QPlainTextEdit[readOnly=\"true\"] {'
         "border: 2px solid red;"
-        "background-color: yellow;"
-        "color: black;}"
+        "background-color: " + COLOR_WARNING_YELLOW + ";"
+        "color: black;}")
 
-    "QPlainTextEdit::hover {"
-        "border-color: black;}"
+SS_TABS = (  # Modern v2.0
+    "QTabWidget::pane {"
+        "border: 0px solid gray;}"
+    "QTabBar::tab:selected {"
+        "background: " + COLOR_TAB_ACTIVE + "; "
+        "border-bottom-color: " + COLOR_TAB_ACTIVE + ";}"
+    "QTabWidget>QWidget>QWidget {"
+        "border: 2px solid gray;"
+        "background: " + COLOR_TAB_ACTIVE + ";} "
+    "QTabBar::tab {"
+        "background: " + COLOR_TAB + ";"
+        "border: 2px solid gray;"
+        "border-bottom-color: " + COLOR_TAB + ";"
+        "border-top-left-radius: 4px;"
+        "border-top-right-radius: 4px;"
+        "min-width: 119px;"
+        "padding: 6px;} "
+    "QTabBar::tab:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border: 2px solid " + COLOR_HOVER_BORDER + ";"
+        "border-bottom-color: " + COLOR_HOVER + ";"
+        "border-top-left-radius: 4px;"
+        "border-top-right-radius: 4px;"
+        "padding: 6px;} "
+    "QTabWidget::tab-bar {"
+        "left: 0px;}")
 
-    'QPlainTextEdit[readOnly="true"]::hover {'
-        "border-color: red;}"
-)
-
-SS_GROUP = (
+SS_GROUP = (  # Legacy v1.0
     "QGroupBox {"
         "background-color: " + COLOR_GROUP_BG + ";"
         "border: 2px solid gray;"
@@ -102,19 +146,38 @@ SS_GROUP = (
         "font: bold;"
         "padding: 8 0 0 0px;"
         "margin-top: 2ex;}"
-
     "QGroupBox:title {"
         "subcontrol-origin: margin;"
         "subcontrol-position: top left;"
         "padding: 0 3px;}"
-
     "QGroupBox:flat {"
         "border: 0px;"
         "border-radius: 0 0px;"
         "padding: 0;}"
 )
 
-SS_TITLE = (
+SS_GROUP_RECT = (  # Modern v2.0
+    "QGroupBox {"
+        "background-color: " + COLOR_GROUP_BG + ";"
+        "border: 2px solid gray;"
+        "border-radius: 0px;"
+        "font: bold;"
+        "margin: 0;"
+        "padding: 14 0 0 0px;}"
+    "QGroupBox::title {"
+        "subcontrol-origin: margin;"
+        "subcontrol-position: top left;"
+        "margin: 0;"
+        "padding: 0;"
+        "top: 4 px;"
+        "left: 4 px;}"
+    "QGroupBox:flat {"
+        "border: 0px;"
+        "border-radius: 0 0px;"
+        "padding: 0;}"
+)
+
+SS_TITLE = (  # Legacy v1.0
     "QLabel {"
         "background-color: " + COLOR_GROUP_BG + ";"
         "padding: 10px;"
@@ -148,7 +211,7 @@ SS_LED_RECT = (  # Modern v2.0
         "color: black;"
         "min-height: 30px;"
         "min-width: 60px;}" # Was 76px
-    "QPushButton::checked {"
+    "QPushButton:checked {"
         "background-color: " + COLOR_LED_GREEN + ";}")
 
 SS_ERROR_LED = (  # Modern v2.0
