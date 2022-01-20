@@ -31,6 +31,8 @@ COLOR_TAB_ACTIVE     = "rgb(207, 225, 225)"
 COLOR_TAB            = "rgb(234, 235, 233)"
 COLOR_HOVER          = "rgb(229, 241, 251)"
 COLOR_HOVER_BORDER   = "rgb(0  , 120, 215)"
+COLOR_ERROR_RED      = "rgb(255,   0,   0)"
+COLOR_WARNING_YELLOW = "yellow"
 # fmt: on
 
 # ------------------------------------------------------------------------------
@@ -119,137 +121,138 @@ SS_TITLE = (
         "border-radius: 5px;"
         "font: bold;}"
 )
-# fmt: on
 
 # ------------------------------------------------------------------------------
 #   LEDs
 # ------------------------------------------------------------------------------
 
+# fmt: off
+SS_LED = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_LED_RED + ";"
+        "border: 1px solid black;"
+        "border-radius: 15px;"
+        "color: black;"
+        "max-height: 30px;"
+        "max-width: 30px;"
+        "height: 30px;"
+        "width: 30px;}"
+    "QPushButton:checked {"
+        "background-color: " + COLOR_LED_GREEN + ";}")
 
-def create_LED_indicator(**kwargs) -> QPushButton:
-    """
-    False: dim red
-    True : green
-    """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_LED_RED + ";"
-            "color: black;"
-            "border: 1px solid black;"
-            "border-radius: 15px;"
-            "max-height: 30px;"
-            "max-width: 30px;"
-            "height: 30px;"
-            "width: 30px;}"
+SS_LED_RECT = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_LED_RED + ";"
+        "border: 1px solid black;"
+        "border-radius: 0px;"
+        "color: black;"
+        "min-height: 30px;"
+        "min-width: 60px;}" # Was 76px
+    "QPushButton::checked {"
+        "background-color: " + COLOR_LED_GREEN + ";}")
 
-        "QPushButton:checked {"
-            "background-color: " + COLOR_LED_GREEN + ";}"
-    )
-    # fmt: on
+SS_ERROR_LED = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_LED_GREEN + ";"
+        "border: 1px solid black;"
+        "border-radius: 0px;"
+        "color: black;"
+        "min-height: 30px;"
+        "min-width: 30px;}"
+    "QPushButton:checked {"
+        "font-weight: bold;"
+        "background-color: " + COLOR_ERROR_RED + ";}")
+
+SS_TINY_LED =  (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_LED_NEUTRAL + ";"
+        "border: 1px solid black;"
+        "border-radius: 5px;"
+        "color: black;"
+        "max-height: 10px;"
+        "max-width: 10px;"
+        "height: 10px;"
+        "width: 10px;}"
+    "QPushButton:checked {"
+        "background-color: " + COLOR_LED_GREEN + ";}")
+
+SS_TINY_ERROR_LED = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_LED_NEUTRAL + ";"
+        "border: 1px solid black;"
+        "border-radius: 5px;"
+        "color: black;"
+        "max-height: 10px;"
+        "max-width: 10px;"
+        "height: 10px;"
+        "width: 10px;}"
+    "QPushButton:checked {"
+        "background-color: " + COLOR_ERROR_RED + ";}")
+# fmt: on
+
+
+def create_LED_indicator(**kwargs) -> QPushButton:  # Modern v2.0
+    """
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
+
+    checked=False: LED red
+    checked=True : LED green
+    """
     button = QPushButton(checkable=True, enabled=False, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_LED)
     return button
 
 
-def create_LED_indicator_rect(**kwargs) -> QPushButton:
+def create_LED_indicator_rect(**kwargs) -> QPushButton:  # Modern v2.0
     """
-    False: dim red
-    True : green
-    """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_LED_RED + ";"
-            "color: black;"
-            "border: 1px solid black;"
-            "border-radius: 0px;"
-            "min-height: 30px;"
-            "min-width: 76px;}"
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
 
-        "QPushButton:checked {"
-            "background-color: " + COLOR_LED_GREEN + ";}"
-    )
-    # fmt: on
+    checked=False: LED red
+    checked=True : LED green
+    """
     button = QPushButton(checkable=True, enabled=False, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_LED_RECT)
     return button
 
 
-def create_error_LED(**kwargs) -> QPushButton:
+def create_error_LED(**kwargs) -> QPushButton:  # Modern v2.0
     """
-    False: green
-    True : red
-    """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_LED_GREEN + ";"
-            "color: black;"
-            "border: 1px solid black;"
-            "border-radius: 0px;"
-            "min-height: 30px;"
-            "min-width: 30px;}"
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
 
-        "QPushButton:checked {"
-            "font-weight: bold;"
-            "background-color: red;}"
-    )
-    # fmt: on
+    checked=False: LED green
+    checked=True : error red
+    """
     button = QPushButton(checkable=True, enabled=False, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_ERROR_LED)
     return button
 
 
-def create_tiny_LED(**kwargs) -> QPushButton:
+def create_tiny_LED(**kwargs) -> QPushButton:  # Modern v2.0
     """
-    False: neutral
-    True : green
-    """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_LED_NEUTRAL + ";"
-            "color: black;"
-            "border: 1px solid black;"
-            "border-radius: 5px;"
-            "max-height: 10px;"
-            "max-width: 10px;"
-            "height: 10px;"
-            "width: 10px;}"
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
 
-        "QPushButton:checked {"
-            "background-color: " + COLOR_LED_GREEN + ";}"
-    )
-    # fmt: on
+    checked=False: LED neutral
+    checked=True : LED green
+    """
     button = QPushButton(checkable=True, enabled=False, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_TINY_LED)
     return button
 
 
-def create_tiny_error_LED(**kwargs) -> QPushButton:
+def create_tiny_error_LED(**kwargs) -> QPushButton:  # Modern v2.0
     """
-    False: neutral
-    True : red
-    """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_LED_NEUTRAL + ";"
-            "color: black;"
-            "border: 1px solid black;"
-            "border-radius: 5px;"
-            "max-height: 10px;"
-            "max-width: 10px;"
-            "height: 10px;"
-            "width: 10px;}"
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
 
-        "QPushButton:checked {"
-            "background-color: red;}"
-    )
-    # fmt: on
+    checked=False: LED neutral
+    checked=True : error red
+    """
     button = QPushButton(checkable=True, enabled=False, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_TINY_ERROR_LED)
     return button
 
 
@@ -257,42 +260,110 @@ def create_tiny_error_LED(**kwargs) -> QPushButton:
 #   Toggle buttons
 # ------------------------------------------------------------------------------
 
-DFLT_TOGGLE_BTN_PADDING = "6px 6px 6px 6px"
+DFLT_TOGGLE_BTN_PADDING = "1px 1px 1px 1px"
 DFLT_TOGGLE_BTN_BORDER_WIDTH = "2px"
 DFLT_TOGGLE_BTN_BORDER_RADIUS = "5px"
 
+# fmt: off
+SS_RELAY_BUTTON = (
+    "QPushButton {" # Modern v2.0
+        "background-color: " + COLOR_LED_RED + ";"
+        "border-style: inset;"
+        "border-width: 1px;"
+        "max-height: 30px;"
+        "max-width: 30px;"
+        "height: 30px;"
+        "width: 30px;}"
+    "QPushButton:hover {"
+        "border-width: 2px;"
+        "border-color: black;}"
+    "QPushButton:disabled {"
+        "border: 1px solid black;"
+        "border-radius: 15px;"
+        "color: black;}"
+    "QPushButton:checked {"
+        "border-style: outset;"
+        "background-color: " + COLOR_LED_GREEN + ";}")
 
-def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
+SS_TOGGLE_BUTTON = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_BG + ";"
+        "border-style: outset;"
+        "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
+        "border-radius: " + DFLT_TOGGLE_BTN_BORDER_RADIUS + ";"
+        "border-color: gray;"
+        "color: black;"
+        "padding: " + DFLT_TOGGLE_BTN_PADDING + ";}"
+    "QPushButton:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border-color: " + COLOR_HOVER_BORDER + ";}"
+    "QPushButton:checked {"
+        "background-color: " + COLOR_LED_GREEN + ";"
+        "border-style: inset;"
+        "border-color: dimgray mediumspringgreen mediumspringgreen dimgray;"
+        "font-weight: normal;}"
+    "QPushButton:checked:hover {"
+        "border-color: " + COLOR_HOVER_BORDER + ";}"
+    "QPushButton:disabled {"
+        "color: dimgrey;}")
+
+SS_TOGGLE_BUTTON_2 = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_BG + ";"
+        "border-style: outset;"
+        "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
+        "border-radius: " + DFLT_TOGGLE_BTN_BORDER_RADIUS + ";"
+        "border-color: gray;"
+        "color: black;"
+        "padding: " + DFLT_TOGGLE_BTN_PADDING + ";}"
+    "QPushButton:hover {"
+        "background: " + COLOR_HOVER + ";"
+        "border-color: " + COLOR_HOVER_BORDER + ";}"
+    "QPushButton:checked {"
+        "background-color: " + COLOR_WARNING_YELLOW + ";"
+        "border-style: groove;"
+        "border-color: firebrick red red firebrick;"
+        "font-weight: bold;}"
+    "QPushButton:checked:hover {"
+        "border-color: " + COLOR_HOVER_BORDER + ";}"
+    "QPushButton:disabled {"
+        "color: dimgray;}")
+
+SS_TOGGLE_BUTTON_3 = (  # Modern v2.0
+    "QPushButton {"
+        "background-color: " + COLOR_WARNING_YELLOW +";"
+        "border-style: ridge;"
+        "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
+        "border-radius: " + DFLT_TOGGLE_BTN_BORDER_RADIUS + ";"
+        "border-color: red firebrick firebrick red;"
+        "color: black;"
+        "padding: " + DFLT_TOGGLE_BTN_PADDING + ";"
+        "font-weight: bold;}"
+    "QPushButton:hover {"
+        "border-color: " + COLOR_HOVER_BORDER + ";}"
+    "QPushButton:checked {"
+        "background-color: " + COLOR_LED_GREEN + ";"
+        "border-style: inset;"
+        "border-color: dimgray mediumspringgreen mediumspringgreen dimgray;"
+        "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
+        "font-weight: normal;}"
+    "QPushButton:checked:hover {"
+        "border-color: " + COLOR_HOVER_BORDER + ";}"
+    "QPushButton:disabled {"
+        "color: dimgray;}")
+# fmt: on
+
+
+def create_Relay_button(text: str = "", **kwargs) -> QPushButton:  # Modern v2.0
     """
-    False: dim red
-    True : green
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
+
+    checked=False: LED red
+    checked=True : LED green
     """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "border-style: inset;"
-            "border-width: 1px;"
-            "max-height: 30px;"
-            "max-width: 30px;"
-            "height: 30px;"
-            "width: 30px;"
-            "background-color: " + COLOR_LED_RED + ";}"
-
-        "QPushButton:disabled {"
-            "border: 1px solid black;"
-            "border-radius: 15px;"
-            "color: black;}"
-
-        "QPushButton:checked {"
-            "border-style: outset;"
-            "background-color: " + COLOR_LED_GREEN + ";}"
-
-        "QPushButton::hover {"
-            "border-color: black;}"
-    )
-    # fmt: on
     button = QPushButton(text=text, checkable=True, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_RELAY_BUTTON)
     button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
 
     # NOTE: Do not enable below code. There is a good reason to not change the
@@ -308,98 +379,55 @@ def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
     return button
 
 
-def create_Toggle_button(text: str = "", **kwargs) -> QPushButton:
+def create_Toggle_button(  # Modern v2.0
+    text: str = "", minimumHeight=32, **kwargs
+) -> QPushButton:
     """
-    False: default
-    True : green
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
+
+    checked=False: default
+    checked=True : LED green
     """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_BG + ";"
-            "border-style: outset;"
-            "border-color: gray dimgray dimgray gray;"
-            "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
-            "border-radius: " + DFLT_TOGGLE_BTN_BORDER_RADIUS + ";"
-            "padding: " + DFLT_TOGGLE_BTN_PADDING + ";"
-            "color: black;}"
-
-        "QPushButton:disabled {"
-            "color: dimgray;}"
-
-        "QPushButton:checked {"
-            "background-color: " + COLOR_LED_GREEN + ";"
-            "border-style: inset;"
-            "border-color: dimgray mediumspringgreen mediumspringgreen dimgray;}"
-    )
-    # fmt: on
     button = QPushButton(text=text, checkable=True, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_TOGGLE_BUTTON)
+    if minimumHeight is not None:
+        button.setMinimumHeight(minimumHeight)
     button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
     return button
 
 
-def create_Toggle_button_2(text: str = "", **kwargs) -> QPushButton:
+def create_Toggle_button_2(  # Modern v2.0
+    text: str = "", minimumHeight=32, **kwargs
+) -> QPushButton:
     """
-    False: default
-    True : warning red-lined yellow
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
+
+    checked=False: default
+    checked=True : red-lined warning yellow
     """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: " + COLOR_BG + ";"
-            "border-style: outset;"
-            "border-color: gray dimgray dimgray gray;"
-            "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
-            "border-radius: " + DFLT_TOGGLE_BTN_BORDER_RADIUS + ";"
-            "padding: " + DFLT_TOGGLE_BTN_PADDING + ";"
-            "color: black;}"
-
-        "QPushButton:disabled {"
-            "color: dimgray;}"
-
-        "QPushButton:checked {"
-            "background-color: yellow;"
-            "border-style: groove;"
-            "border-color: firebrick red red firebrick;"
-            "font-weight: bold;}"
-    )
-    # fmt: on
     button = QPushButton(text=text, checkable=True, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_TOGGLE_BUTTON_2)
+    if minimumHeight is not None:
+        button.setMinimumHeight(minimumHeight)
     button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
     return button
 
 
-def create_Toggle_button_3(text: str = "", **kwargs) -> QPushButton:
+def create_Toggle_button_3(  # Modern v2.0
+    text: str = "", minimumHeight=32, **kwargs
+) -> QPushButton:
     """
-    False: warning red-lined yellow
-    True : green
+    Useful kwargs:
+      text: str, icon: QIcon, checked: bool, parent
+
+    checked=False: red-lined warning yellow
+    checked=True : LED green
     """
-    # fmt: off
-    SS = (
-        "QPushButton {"
-            "background-color: yellow;"
-            "border-style: ridge;"
-            "border-color: red firebrick firebrick red;"
-            "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
-            "border-radius: " + DFLT_TOGGLE_BTN_BORDER_RADIUS + ";"
-            "padding: " + DFLT_TOGGLE_BTN_PADDING + ";"
-            "color: black;"
-            "font-weight: bold;}"
-
-        "QPushButton:disabled {"
-            "color: dimgray;}"
-
-        "QPushButton:checked {"
-            "background-color: " + COLOR_LED_GREEN + ";"
-            "border-style: inset;"
-            "border-color: dimgray mediumspringgreen mediumspringgreen dimgray;"
-            "border-width: " + DFLT_TOGGLE_BTN_BORDER_WIDTH + ";"
-            "font-weight: normal;}"
-    )
-    # fmt: on
     button = QPushButton(text=text, checkable=True, **kwargs)
-    button.setStyleSheet(SS)
+    button.setStyleSheet(SS_TOGGLE_BUTTON_3)
+    if minimumHeight is not None:
+        button.setMinimumHeight(minimumHeight)
     button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
     return button
