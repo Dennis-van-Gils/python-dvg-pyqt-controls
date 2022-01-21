@@ -24,7 +24,7 @@ def read(*names, **kwargs):
 
 setup(
     name="dvg-pyqt-controls",
-    version="2.0.0",
+    version="1.1.0",
     license="MIT",
     description="Mishmash of PyQt5 stylesheets and custom controls that I personally use in many of my projects.",
     long_description="%s\n%s"
