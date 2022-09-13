@@ -1,17 +1,64 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Mishmash of PyQt5 stylesheets and custom controls that I personally use in
-many of my projects.
+"""Mishmash of PyQt/PySide stylesheets and custom controls that I personally use
+in many of my projects.
 """
 __author__ = "Dennis van Gils"
 __authoremail__ = "vangils.dennis@gmail.com"
 __url__ = "https://github.com/Dennis-van-Gils/python-dvg-pyqt-controls"
-__date__ = "21-01-2021"
-__version__ = "1.1.0"
+__date__ = "13-09-2022"
+__version__ = "1.2.0"
 
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtGui import QColor, QCursor
+# Mechanism to support both PyQt and PySide
+# -----------------------------------------
+import os
+import sys
+
+QT_LIB = os.getenv("PYQTGRAPH_QT_LIB")
+PYSIDE = "PySide"
+PYSIDE2 = "PySide2"
+PYSIDE6 = "PySide6"
+PYQT4 = "PyQt4"
+PYQT5 = "PyQt5"
+PYQT6 = "PyQt6"
+
+# pylint: disable=import-error, no-name-in-module
+# fmt: off
+if QT_LIB is None:
+    libOrder = [PYQT5, PYSIDE2, PYSIDE6, PYQT6]
+    for lib in libOrder:
+        if lib in sys.modules:
+            QT_LIB = lib
+            break
+
+if QT_LIB is None:
+    for lib in libOrder:
+        try:
+            __import__(lib)
+            QT_LIB = lib
+            break
+        except ImportError:
+            pass
+
+if QT_LIB is None:
+    raise Exception(
+        "DvG_PyQt_controls requires PyQt5, PyQt6, PySide2 or PySide6; "
+        "none of these packages could be imported."
+    )
+
+if QT_LIB == PYQT5:
+    from PyQt5 import QtCore, QtGui, QtWidgets as QtWid    # type: ignore
+elif QT_LIB == PYQT6:
+    from PyQt6 import QtCore, QtGui, QtWidgets as QtWid    # type: ignore
+elif QT_LIB == PYSIDE2:
+    from PySide2 import QtCore, QtGui, QtWidgets as QtWid  # type: ignore
+elif QT_LIB == PYSIDE6:
+    from PySide6 import QtCore, QtGui, QtWidgets as QtWid  # type: ignore
+
+# fmt: on
+# pylint: enable=import-error, no-name-in-module
+# \end[Mechanism to support both PyQt and PySide]
+# -----------------------------------------------
 
 # fmt: off
 # Legacy v1.0
@@ -40,8 +87,8 @@ COLOR_WARNING_YELLOW = "yellow"
 #  pg.setConfigOption("background", COLOR_GRAPH_BG)
 #  pg.setConfigOption("foreground", COLOR_GRAPH_FG)
 #  PEN_01 = pg.mkPen(color=COLOR_PEN_PINK, width=3)
-COLOR_GRAPH_BG = QColor(  0,  20,  20)  # Background
-COLOR_GRAPH_FG = QColor(240, 240, 240)  # Foreground
+COLOR_GRAPH_BG = QtGui.QColor(  0,  20,  20)  # Background
+COLOR_GRAPH_FG = QtGui.QColor(240, 240, 240)  # Foreground
 COLOR_PEN_RED       = [255,  20,  20]
 COLOR_PEN_ORANGE    = [255, 127,  39]
 COLOR_PEN_YELLOW    = [255, 255,  90]
@@ -264,19 +311,19 @@ SS_TINY_ERROR_LED = (
 # fmt: on
 
 
-def create_LED_indicator(**kwargs) -> QPushButton:
+def create_LED_indicator(**kwargs) -> QtWid.QPushButton:
     """Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
 
     checked=False -> LED red
     checked=True  -> LED green
     """
-    button = QPushButton(checkable=True, enabled=False, **kwargs)
+    button = QtWid.QPushButton(checkable=True, enabled=False, **kwargs)
     button.setStyleSheet(SS_LED_INDICATOR)
     return button
 
 
-def create_LED_indicator_rect(**kwargs) -> QPushButton:
+def create_LED_indicator_rect(**kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -284,12 +331,12 @@ def create_LED_indicator_rect(**kwargs) -> QPushButton:
     checked=False -> LED red
     checked=True  -> LED green
     """
-    button = QPushButton(checkable=True, enabled=False, **kwargs)
+    button = QtWid.QPushButton(checkable=True, enabled=False, **kwargs)
     button.setStyleSheet(SS_LED_INDICATOR_RECT)
     return button
 
 
-def create_error_LED(**kwargs) -> QPushButton:
+def create_error_LED(**kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -297,12 +344,12 @@ def create_error_LED(**kwargs) -> QPushButton:
     checked=False -> LED green
     checked=True  -> error red
     """
-    button = QPushButton(checkable=True, enabled=False, **kwargs)
+    button = QtWid.QPushButton(checkable=True, enabled=False, **kwargs)
     button.setStyleSheet(SS_ERROR_LED)
     return button
 
 
-def create_tiny_LED(**kwargs) -> QPushButton:
+def create_tiny_LED(**kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -310,12 +357,12 @@ def create_tiny_LED(**kwargs) -> QPushButton:
     checked=False -> LED neutral
     checked=True  -> LED green
     """
-    button = QPushButton(checkable=True, enabled=False, **kwargs)
+    button = QtWid.QPushButton(checkable=True, enabled=False, **kwargs)
     button.setStyleSheet(SS_TINY_LED)
     return button
 
 
-def create_tiny_error_LED(**kwargs) -> QPushButton:
+def create_tiny_error_LED(**kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -323,7 +370,7 @@ def create_tiny_error_LED(**kwargs) -> QPushButton:
     checked=False -> LED neutral
     checked=True  -> error red
     """
-    button = QPushButton(checkable=True, enabled=False, **kwargs)
+    button = QtWid.QPushButton(checkable=True, enabled=False, **kwargs)
     button.setStyleSheet(SS_TINY_ERROR_LED)
     return button
 
@@ -425,7 +472,7 @@ SS_TOGGLE_BUTTON_3 = (
 # fmt: on
 
 
-def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
+def create_Relay_button(text: str = "", **kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -433,9 +480,9 @@ def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
     checked=False -> LED red
     checked=True  -> LED green
     """
-    button = QPushButton(text=text, checkable=True, **kwargs)
+    button = QtWid.QPushButton(text=text, checkable=True, **kwargs)
     button.setStyleSheet(SS_RELAY_BUTTON)
-    button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+    button.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
 
     # NOTE: Do not enable below code. There is a good reason to not change the
     # relay button label immediately at click. The text-value "0" or "1" can
@@ -450,7 +497,7 @@ def create_Relay_button(text: str = "", **kwargs) -> QPushButton:
     return button
 
 
-def create_Toggle_button(text: str = "", **kwargs) -> QPushButton:
+def create_Toggle_button(text: str = "", **kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -458,13 +505,13 @@ def create_Toggle_button(text: str = "", **kwargs) -> QPushButton:
     checked=False -> default
     checked=True  -> LED green
     """
-    button = QPushButton(text=text, checkable=True, **kwargs)
+    button = QtWid.QPushButton(text=text, checkable=True, **kwargs)
     button.setStyleSheet(SS_TOGGLE_BUTTON)
-    button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+    button.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
     return button
 
 
-def create_Toggle_button_2(text: str = "", **kwargs) -> QPushButton:
+def create_Toggle_button_2(text: str = "", **kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -472,13 +519,13 @@ def create_Toggle_button_2(text: str = "", **kwargs) -> QPushButton:
     checked=False -> default
     checked=True  -> red-lined warning yellow
     """
-    button = QPushButton(text=text, checkable=True, **kwargs)
+    button = QtWid.QPushButton(text=text, checkable=True, **kwargs)
     button.setStyleSheet(SS_TOGGLE_BUTTON_2)
-    button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+    button.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
     return button
 
 
-def create_Toggle_button_3(text: str = "", **kwargs) -> QPushButton:
+def create_Toggle_button_3(text: str = "", **kwargs) -> QtWid.QPushButton:
     """
     Useful kwargs:
       text: str, icon: QIcon, checked: bool, parent
@@ -486,7 +533,7 @@ def create_Toggle_button_3(text: str = "", **kwargs) -> QPushButton:
     checked=False -> red-lined warning yellow
     checked=True  -> LED green
     """
-    button = QPushButton(text=text, checkable=True, **kwargs)
+    button = QtWid.QPushButton(text=text, checkable=True, **kwargs)
     button.setStyleSheet(SS_TOGGLE_BUTTON_3)
-    button.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+    button.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
     return button

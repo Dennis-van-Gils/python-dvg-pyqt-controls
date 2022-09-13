@@ -24,9 +24,9 @@ def read(*names, **kwargs):
 
 setup(
     name="dvg-pyqt-controls",
-    version="1.1.0",
+    version="1.2.0",
     license="MIT",
-    description="Mishmash of PyQt5 stylesheets and custom controls that I personally use in many of my projects.",
+    description="Mishmash of PyQt/PySide stylesheets and custom controls that I personally use in many of my projects.",
     long_description="%s\n%s"
     % (
         re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub(
@@ -50,10 +50,11 @@ setup(
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "Operating System :: OS Independent",
-        "Programming Language :: Python",        
+        "Programming Language :: Python",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Utilities",
         "Topic :: Scientific/Engineering ",
         "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
@@ -62,13 +63,14 @@ setup(
         "Issue Tracker": "https://github.com/Dennis-van-Gils/python-dvg-pyqt-controls/issues",
     },
     keywords=[
+        "PyQt5",
+        "PyQt6",
+        "PySide2",
+        "PySide6",
         "controls",
         "stylesheets",
-        "pyqt5",
     ],
     python_requires=">=3.6",
-    install_requires=[
-        "pyqt5~=5.12",
-    ],
+    install_requires=[],
     extras_require={},
 )

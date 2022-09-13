@@ -4,8 +4,56 @@
 import sys
 from typing import List
 
-from PyQt5 import QtCore, QtGui
-from PyQt5 import QtWidgets as QtWid
+# Mechanism to support both PyQt and PySide
+# -----------------------------------------
+import os
+import sys
+
+QT_LIB = os.getenv("PYQTGRAPH_QT_LIB")
+PYSIDE = "PySide"
+PYSIDE2 = "PySide2"
+PYSIDE6 = "PySide6"
+PYQT4 = "PyQt4"
+PYQT5 = "PyQt5"
+PYQT6 = "PyQt6"
+
+# pylint: disable=import-error, no-name-in-module
+# fmt: off
+if QT_LIB is None:
+    libOrder = [PYQT5, PYSIDE2, PYSIDE6, PYQT6]
+    for lib in libOrder:
+        if lib in sys.modules:
+            QT_LIB = lib
+            break
+
+if QT_LIB is None:
+    for lib in libOrder:
+        try:
+            __import__(lib)
+            QT_LIB = lib
+            break
+        except ImportError:
+            pass
+
+if QT_LIB is None:
+    raise Exception(
+        "DvG_PyQt_controls requires PyQt5, PyQt6, PySide2 or PySide6; "
+        "none of these packages could be imported."
+    )
+
+if QT_LIB == PYQT5:
+    from PyQt5 import QtCore, QtGui, QtWidgets as QtWid    # type: ignore
+elif QT_LIB == PYQT6:
+    from PyQt6 import QtCore, QtGui, QtWidgets as QtWid    # type: ignore
+elif QT_LIB == PYSIDE2:
+    from PySide2 import QtCore, QtGui, QtWidgets as QtWid  # type: ignore
+elif QT_LIB == PYSIDE6:
+    from PySide6 import QtCore, QtGui, QtWidgets as QtWid  # type: ignore
+
+# fmt: on
+# pylint: enable=import-error, no-name-in-module
+# \end[Mechanism to support both PyQt and PySide]
+# -----------------------------------------------
 
 import dvg_pyqt_controls as c
 
@@ -92,7 +140,7 @@ class MainWindow(QtWid.QWidget):
 
             grid = QtWid.QGridLayout()
             add2grid(grid, labels, controls)
-            grid.setAlignment(QtCore.Qt.AlignTop)
+            grid.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
 
             if create_control_fun.__name__ == "create_Relay_button":
                 grid.setVerticalSpacing(0)
@@ -103,7 +151,9 @@ class MainWindow(QtWid.QWidget):
             grpb = QtWid.QGroupBox(descr)
             grpb.setLayout(grid)
 
-            hbox.addWidget(grpb)  # , stretch=0, alignment=QtCore.Qt.AlignTop)
+            hbox.addWidget(
+                grpb
+            )  # , stretch=0, alignment=QtCore.Qt.AlignmentFlag.AlignTop)
             return (controls, labels)
 
         # ----------------------------------------------------------------------
@@ -160,7 +210,7 @@ class MainWindow(QtWid.QWidget):
             control.setStyleSheet(c.SS_TEXTBOX_READ_ONLY)
 
         grid = QtWid.QGridLayout()
-        grid.setAlignment(QtCore.Qt.AlignTop)
+        grid.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         grid.addWidget(qlin_1, 0, 0)
         grid.addWidget(qlin_2, 1, 0)
         grid.addWidget(qpte_1, 2, 0)
@@ -184,7 +234,7 @@ class MainWindow(QtWid.QWidget):
             control.setStyleSheet(c.SS_TEXTBOX_ERRORS)
 
         grid = QtWid.QGridLayout()
-        grid.setAlignment(QtCore.Qt.AlignTop)
+        grid.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         grid.addWidget(qlin_1, 0, 0)
         grid.addWidget(qlin_2, 1, 0)
         grid.addWidget(qpte_1, 2, 0)
@@ -203,7 +253,7 @@ class MainWindow(QtWid.QWidget):
 
         # PyQt5 defaults
         grid = QtWid.QGridLayout()
-        grid.setAlignment(QtCore.Qt.AlignTop)
+        grid.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         grid.addWidget(QtWid.QPushButton("Default QPushButton"), 0, 0)
         grid.addWidget(QtWid.QLineEdit("Default QLineEdit"), 1, 0)
         grid.addWidget(QtWid.QTextEdit("Default QTextEdit"), 2, 0)
@@ -241,4 +291,7 @@ if __name__ == "__main__":
     app = QtWid.QApplication(sys.argv)
     window = MainWindow()
     window.show()
-    sys.exit(app.exec_())
+    if QT_LIB in (PYQT5, PYSIDE2):
+        sys.exit(app.exec_())
+    else:
+        sys.exit(app.exec())

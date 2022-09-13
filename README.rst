@@ -12,7 +12,7 @@
 
 DvG_PyQt_controls
 =================
-*Mishmash of PyQt5 stylesheets and custom controls that I personally use
+*Mishmash of PyQt/PySide stylesheets and custom controls that I personally use
 in many of my projects.*
 
 - Github: https://github.com/Dennis-van-Gils/python-dvg-pyqt-controls
@@ -21,5 +21,5 @@ in many of my projects.*
 Installation::
 
     pip install dvg-pyqt-controls
-    
+
 .. image:: https://raw.githubusercontent.com/Dennis-van-Gils/python-dvg-pyqt-controls/master/demos/demo_pyqt_controls.png
