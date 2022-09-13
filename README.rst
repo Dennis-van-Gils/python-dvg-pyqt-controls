@@ -15,6 +15,8 @@ DvG_PyQt_controls
 *Mishmash of PyQt/PySide stylesheets and custom controls that I personally use
 in many of my projects.*
 
+Supports PyQt5, PyQt6, PySide2 and PySide6.
+
 - Github: https://github.com/Dennis-van-Gils/python-dvg-pyqt-controls
 - PyPI: https://pypi.org/project/dvg-pyqt-controls
 
