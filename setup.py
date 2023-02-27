@@ -24,7 +24,7 @@ def read(*names, **kwargs):
 
 setup(
     name="dvg-pyqt-controls",
-    version="1.2.0",
+    version="1.3.0",
     license="MIT",
     description="Mishmash of PyQt/PySide stylesheets and custom controls that I personally use in many of my projects.",
     long_description="%s\n%s"
@@ -55,6 +55,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Utilities",
         "Topic :: Scientific/Engineering ",
         "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
