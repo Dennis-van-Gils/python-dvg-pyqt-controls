@@ -1,33 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 from typing import List
 
 # Mechanism to support both PyQt and PySide
 # -----------------------------------------
-import os
-import sys
 
-QT_LIB = os.getenv("PYQTGRAPH_QT_LIB")
-PYSIDE = "PySide"
-PYSIDE2 = "PySide2"
-PYSIDE6 = "PySide6"
-PYQT4 = "PyQt4"
 PYQT5 = "PyQt5"
 PYQT6 = "PyQt6"
+PYSIDE2 = "PySide2"
+PYSIDE6 = "PySide6"
+QT_LIB_ORDER = [PYQT5, PYSIDE2, PYSIDE6, PYQT6]
+QT_LIB = None
 
-# pylint: disable=import-error, no-name-in-module
-# fmt: off
+# Parse optional cli argument to enfore a QT_LIB
+# cli example: python benchmark.py pyside6
+if len(sys.argv) > 1:
+    arg1 = str(sys.argv[1]).upper()
+    for i, lib in enumerate(QT_LIB_ORDER):
+        if arg1 == lib.upper():
+            QT_LIB = lib
+            break
+
 if QT_LIB is None:
-    libOrder = [PYQT5, PYSIDE2, PYSIDE6, PYQT6]
-    for lib in libOrder:
+    for lib in QT_LIB_ORDER:
         if lib in sys.modules:
             QT_LIB = lib
             break
 
 if QT_LIB is None:
-    for lib in libOrder:
+    for lib in QT_LIB_ORDER:
         try:
             __import__(lib)
             QT_LIB = lib
@@ -36,11 +40,14 @@ if QT_LIB is None:
             pass
 
 if QT_LIB is None:
-    raise Exception(
-        "DvG_PyQt_controls requires PyQt5, PyQt6, PySide2 or PySide6; "
+    this_file = __file__.split(os.sep)[-1]
+    raise ImportError(
+        f"{this_file} requires PyQt5, PyQt6, PySide2 or PySide6; "
         "none of these packages could be imported."
     )
 
+# fmt: off
+# pylint: disable=import-error, no-name-in-module
 if QT_LIB == PYQT5:
     from PyQt5 import QtCore, QtGui, QtWidgets as QtWid    # type: ignore
 elif QT_LIB == PYQT6:
@@ -49,14 +56,20 @@ elif QT_LIB == PYSIDE2:
     from PySide2 import QtCore, QtGui, QtWidgets as QtWid  # type: ignore
 elif QT_LIB == PYSIDE6:
     from PySide6 import QtCore, QtGui, QtWidgets as QtWid  # type: ignore
-
-# fmt: on
 # pylint: enable=import-error, no-name-in-module
+# fmt: on
+
+# pylint: disable=c-extension-no-member
+QT_VERSION = (
+    QtCore.QT_VERSION_STR if QT_LIB in (PYQT5, PYQT6) else QtCore.__version__
+)
+print(f"{QT_LIB:9s} {QT_VERSION}")
+# pylint: enable=c-extension-no-member
+
 # \end[Mechanism to support both PyQt and PySide]
 # -----------------------------------------------
 
 import dvg_pyqt_controls as c
-
 
 # ------------------------------------------------------------------------------
 #   MainWindow
@@ -87,7 +100,7 @@ class MainWindow(QtWid.QWidget):
             N: int = 8,
             unchecked_text: str = "Off",
             checked_text: str = "On",
-            **kwargs
+            **kwargs,
         ):
             controls = list()
             labels = list()
@@ -251,14 +264,14 @@ class MainWindow(QtWid.QWidget):
         )
         qlbl.setStyleSheet(c.SS_TITLE)
 
-        # PyQt5 defaults
+        # PyQt defaults
         grid = QtWid.QGridLayout()
         grid.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         grid.addWidget(QtWid.QPushButton("Default QPushButton"), 0, 0)
         grid.addWidget(QtWid.QLineEdit("Default QLineEdit"), 1, 0)
         grid.addWidget(QtWid.QTextEdit("Default QTextEdit"), 2, 0)
 
-        grpb = QtWid.QGroupBox("PyQt5 defaults using SS_GROUP_RECT")
+        grpb = QtWid.QGroupBox("PyQt defaults using SS_GROUP_RECT")
         grpb.setStyleSheet(c.SS_GROUP_RECT)
         grpb.setLayout(grid)
 
