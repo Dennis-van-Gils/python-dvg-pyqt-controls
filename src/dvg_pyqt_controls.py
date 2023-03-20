@@ -6,8 +6,8 @@ in many of my projects.
 __author__ = "Dennis van Gils"
 __authoremail__ = "vangils.dennis@gmail.com"
 __url__ = "https://github.com/Dennis-van-Gils/python-dvg-pyqt-controls"
-__date__ = "27-02-2023"
-__version__ = "1.3.0"
+__date__ = "20-03-2023"
+__version__ = "1.4.0"
 
 import os
 import sys
@@ -202,7 +202,7 @@ SS_GROUP = (
         "border-radius: 5px;"
         "font: bold;"
         "padding: 8 0 0 0px;"
-        "margin-top: 2ex;}"
+        "margin-top: " + ("2ex" if QT_LIB in (PYQT5, PYSIDE2) else "1.2ex") + ";}"
     "QGroupBox:title {"
         "subcontrol-origin: margin;"
         "subcontrol-position: top left;"
@@ -220,7 +220,7 @@ SS_GROUP_RECT = (
         "border-radius: 0px;"
         "font: bold;"
         "margin: 0;"
-        "padding: 14 0 0 0px;}"
+        "padding: 3ex 0 0 0;}"
     "QGroupBox::title {"
         "subcontrol-origin: margin;"
         "subcontrol-position: top left;"
@@ -309,6 +309,21 @@ SS_TINY_ERROR_LED = (
     "QPushButton:checked {"
         "background-color: " + COLOR_ERROR_RED + ";}")
 # fmt: on
+
+
+def e8(
+    N: int,
+    font: QtGui.QFont = None,
+    extra_padding: int = 14,
+) -> int:
+    """Return the pixel width that is necessary to fit `N` number of '8's in the
+    supplied `font`. In analogy to the 'em' font-metric, but now focused on
+    displaying numeric values.
+    """
+    if font is None:
+        font = QtGui.QGuiApplication.font()
+    qfm = QtGui.QFontMetrics(font)
+    return qfm.horizontalAdvance("8") * N + extra_padding
 
 
 def create_LED_indicator(**kwargs) -> QtWid.QPushButton:

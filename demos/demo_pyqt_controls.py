@@ -84,6 +84,11 @@ class MainWindow(QtWid.QWidget):
         self.setWindowTitle("Demo: dvg_pyqt_controls")
         self.setStyleSheet(c.SS_GROUP)
 
+        # Adjust font size while keeping default font family
+        self.main_font = QtGui.QFont(QtGui.QGuiApplication.font().family(), 9)
+        self.setFont(self.main_font)  # Keep
+        QtGui.QGuiApplication.setFont(self.main_font)  # Keep
+
         def add2grid(
             grid: QtWid.QGridLayout,
             labels: List[QtWid.QWidget],
@@ -104,14 +109,14 @@ class MainWindow(QtWid.QWidget):
         ):
             controls = list()
             labels = list()
-            for i in range(N):
-                if i < 2:
+            for k in range(N):
+                if k < 2:
                     checked = False
                     enabled = False
-                elif i < 4:
+                elif k < 4:
                     checked = True
                     enabled = False
-                elif i < 6:
+                elif k < 6:
                     checked = False
                     enabled = True
                 else:
